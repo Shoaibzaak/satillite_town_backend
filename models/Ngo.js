@@ -13,6 +13,11 @@ const NgoModel = new Schema(
       type: String,
     //   required: true,
     },
+       createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User', // This should match the model name of your User model
+      // required: true
+    },
   },
   {
     timestamps: true,

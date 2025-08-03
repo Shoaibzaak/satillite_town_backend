@@ -75,6 +75,10 @@ router.route("/createNgo").post(
 //   Authentication.UserAuth,
   Controller.ngoController.createNgo
 );
+router.route("/createQuery").post(
+  Controller.ngoController.createQuery
+);
+
 
 router.route("/createRequest").post(
    uploadDocuments.fields([{ name: "documents", maxCount: 5 }]),
@@ -110,6 +114,10 @@ router.route("/findNgoById/:id").get(
 router.route("/getAllNgos").get(
   //  Authentication.UserAuth,
   Controller.ngoController.getAllNgo
+);
+router.route("/getAllQueries").get(
+  //  Authentication.UserAuth,
+  Controller.ngoController.getAllquery
 );
 
 module.exports = router;

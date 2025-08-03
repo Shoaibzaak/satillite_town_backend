@@ -49,6 +49,22 @@ module.exports = {
       throw new HTTPError(Status.INTERNAL_SERVER_ERROR, error.message);
     }
   }),
+ createQuery: catchAsync(async (req, res, next) => {
+    try {
+      var NgoData = req.body;
+      const Ngo = new Model.Query(NgoData);
+      await Ngo.save();
+      var message = "query created successfully";
+      if (Ngo == null) {
+        message = "query does not exist.";
+      }
+
+      res.ok(message, Ngo);
+    } catch (error) {
+      throw new HTTPError(Status.INTERNAL_SERVER_ERROR, error.message);
+    }
+  }),
+
 createHelpRequest : catchAsync(async (req, res, next) => {
     console.log("createHelpRequest is called");
     try {
@@ -91,6 +107,26 @@ createHelpRequest : catchAsync(async (req, res, next) => {
         message = "Ngodetails does not exist.";
       }
       var message = "Ngo  details find successfully";
+      res.ok(message, result);
+    } catch (error) {
+      throw new HTTPError(Status.INTERNAL_SERVER_ERROR, error);
+    }
+  }),
+    getAllquery: catchAsync(async (req, res, next) => {
+    console.log("Ngodetails is called");
+    try {
+      var message = "Ngodetails found successfully";
+      var Ngos = await Model.Query.find()
+        .sort("-_id");
+      const NgoSize = Ngos.length;
+      const result = {
+        Ngo: Ngos,
+        count: NgoSize,
+      };
+      if (result == null) {
+        message = "querydetails does not exist.";
+      }
+      var message = "query  details find successfully";
       res.ok(message, result);
     } catch (error) {
       throw new HTTPError(Status.INTERNAL_SERVER_ERROR, error);

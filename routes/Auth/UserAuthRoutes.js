@@ -27,7 +27,7 @@ const imageFileFilter = function (req, file, callback) {
 const upload = multer({
   storage: userStorage,
   fileFilter: function (req, file, callback) {
-    if (file.fieldname === "profilePic") {
+    if (file.fieldname === "profilePic" || file.fieldname === "verifyDocuments") {
       imageFileFilter(req, file, callback);
     } else {
       callback(new Error("Invalid fieldname"));
@@ -79,5 +79,17 @@ router.route("/uploadAdminProfile").post(
   ]),
   Controller.UserAuthController.uploadUserProfilePic
 );
-
+router.route("/uploadJobCreatorProfile").post(
+  upload.fields([
+    {
+      name: "profilePic",
+      maxCount: 1,
+    },
+       {
+      name: "verifyDocuments",
+      maxCount: 1, // or higher if multiple documents needed
+    }
+  ]),
+  Controller.UserAuthController.createHelpCreatorProfile
+);
 module.exports = router;

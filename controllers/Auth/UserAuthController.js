@@ -85,6 +85,52 @@ module.exports = {
     );
     return res.ok("Reset otp has been sent to your registered email.");
   }),
+createHelpCreatorProfile: catchAsync(async (req, res, next) => {
+    const userData = req.body;
+    
+    try {
+      // Initialize variables for file uploads
+      let profilePicResult = null;
+      let verifyDocumentsResult = null;
+
+      // Handle profile picture upload if exists
+      if (req.files?.profilePic) {
+        const profilePicFile = req.files.profilePic[0];
+        profilePicResult = await cloudUpload.cloudinaryUpload(profilePicFile.path);
+      }
+
+      // Handle verification documents upload if exists
+      if (req.files?.verifyDocuments) {
+        const verifyDocFile = req.files.verifyDocuments[0];
+        verifyDocumentsResult = await cloudUpload.cloudinaryUpload(verifyDocFile.path);
+      }
+
+      // Prepare the new help creator profile data
+      const newHelpCreator = {
+        role: 'help_creator', // Set role to help_creator by default
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        phoneNumber: userData.phoneNumber,
+        address: userData.address,
+        ...(profilePicResult && { profilePic: profilePicResult }),
+        ...(verifyDocumentsResult && { verifyDocuments: verifyDocumentsResult }),
+        // Include password if provided
+        ...(userData.password && { password: userData.password })
+      };
+
+      // Create new help creator profile
+      const result = await Model.User.create(newHelpCreator);
+
+      const message = "Help creator profile created successfully";
+      res.ok(message, result);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }),
 
   forgetUserPassword: catchAsync(async (req, res, next) => {
     const { email } = req.body;
