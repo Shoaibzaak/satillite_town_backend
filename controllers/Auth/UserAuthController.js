@@ -121,7 +121,17 @@ createHelpCreatorProfile: catchAsync(async (req, res, next) => {
 
       // Create new help creator profile
       const result = await Model.User.create(newHelpCreator);
-
+     if (userData.email && userData.password) {
+        const emailText = `Here are your credentials to start chatting with help_seeker users:\n\nEmail: ${userData.email}\nPassword: ${userData.password}\n\nYou can now login and start helping seekers.`;
+        const emailSubject = 'Your Help Creator Account Credentials';
+        
+        try {
+            await Services.EmailService.sendEmail(emailText, emailSubject, userData.email);
+        } catch (emailError) {
+          console.error('Failed to send credentials email:', emailError);
+          // Don't fail the whole request if email sending fails
+        }
+      }
       const message = "Help creator profile created successfully";
       res.ok(message, result);
     } catch (error) {

@@ -64,7 +64,7 @@ const transporter = nodeMailer.createTransport({
   },
 });
 
-const from = "no-reply <jusoor>";
+const from = "no-reply <humainty_link>";
 
 module.exports = {
   sendEmail: (text, subject, to) => { // Corrected parameter order
