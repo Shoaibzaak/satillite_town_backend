@@ -152,7 +152,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
     ]
   : [
       'http://localhost:3000',
-      process.env.BASE_URL
+      process.env.BASE_URL1
     ];
 
 module.exports = {
