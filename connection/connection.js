@@ -38,7 +38,7 @@ module.exports = {
     io = new Server(httpServer, {
       cors: {
       origin: process.env.NODE_ENV === 'production' 
-          ? ['https://your-frontend-domain.com'] 
+          ? ['http://localhost:5173/'] 
           : ['http://localhost:5173/'],
       },
     });
