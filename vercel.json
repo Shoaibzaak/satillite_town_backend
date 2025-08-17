@@ -8,8 +8,16 @@
   ],
   "routes": [
     {
+      "src": "/socket.io/(.*)",
+      "dest": "/index.js",
+      "headers": {
+        "Connection": "Upgrade",
+        "Upgrade": "websocket"
+      }
+    },
+    {
       "src": "/(.*)",
-      "dest": "index.js"
+      "dest": "/index.js"
     }
   ]
 }

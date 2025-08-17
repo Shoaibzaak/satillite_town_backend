@@ -5,7 +5,11 @@ const Message = require("../models/Message"); // Adjust path as needed
 const { getSingleUser } = require("../controllers/Auth/UserAuthController"); // Your token verification
 
 let io = null; // Will be set after server creation
-
+const allowedOrigins = [
+  'http://localhost:5173', // Your Vite frontend
+  'https://satillite-town-frontend.vercel.app', // Your production frontend
+  'https://satillite-town-backend-5i11.vercel.app' // Your backend itself
+];
 module.exports = {
   connect: (cb) => {
      const devUrl = `${process.env.BASE_URL}`;
@@ -36,11 +40,14 @@ module.exports = {
   // Add this new method to set up socket handling
   initializeSocket: (httpServer) => {
     io = new Server(httpServer, {
-      cors: {
-      origin: process.env.NODE_ENV === 'production' 
-          ? ['http://localhost:5173/'] 
-          : ['http://localhost:5173/'],
-      },
+       cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+    path: "/socket.io/", // Important trailing slash
+  transports: ['websocket', 'polling'],
+   allowEIO3: true
     });
 
     // Initialize handlers if DB is already connected
