@@ -114,5 +114,10 @@ router.route("/getAllQueries").get(
   //  Authentication.UserAuth,
   Controller.ngoController.getAllquery
 );
+router.route("/deleteQuery/:id").delete(
+  //  Authentication.UserAuth,
+  Controller.ngoController.deleteQuery
+);
+
 
 module.exports = router;

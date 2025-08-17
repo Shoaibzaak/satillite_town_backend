@@ -132,7 +132,28 @@ createHelpRequest : catchAsync(async (req, res, next) => {
       throw new HTTPError(Status.INTERNAL_SERVER_ERROR, error);
     }
   }),
+deleteQuery: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new HTTPError(Status.BAD_REQUEST, "Invalid query ID");
+      }
 
+      const deletedQuery = await Model.Query.findByIdAndDelete(id);
+      
+      if (!deletedQuery) {
+        throw new HTTPError(Status.NOT_FOUND, "Query not found");
+      }
+
+      res.ok("Query deleted successfully", deletedQuery);
+    } catch (error) {
+      if (error instanceof HTTPError) {
+        throw error;
+      }
+      throw new HTTPError(Status.INTERNAL_SERVER_ERROR, error.message);
+    }
+  }),
   // Update a Ngo user
   updateNgo: catchAsync(async (req, res, next) => {
     try {
