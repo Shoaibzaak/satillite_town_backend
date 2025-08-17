@@ -640,7 +640,33 @@ getConversationBetweenUsers: catchAsync(async (req, res, next) => {
     }
   }),
   // Delete a single User with a particular ID
-  // Delete or Temporarily Mark a User based on a condition
+editUser: catchAsync(async (req, res, next) => {
+    const updateData = req.body; // This contains the fields to update
+    const userId=updateData.id
+    try {
+      // Prevent certain fields from being updated if needed
+      const restrictedFields = ['password', 'role', 'isDeleted']; // Example fields you might want to protect
+      restrictedFields.forEach(field => delete updateData[field]);
+
+      const user = await Model.User.findByIdAndUpdate(
+        userId,
+        updateData,
+        { 
+          new: true,         // Return the updated document
+          runValidators: true // Run model validators on update
+        }
+      );
+
+      if (!user) {
+        return res.badRequest("User Not Found in our records");
+      }
+
+      res.ok("User updated successfully", user);
+    } catch (err) {
+      throw new HTTPError(Status.INTERNAL_SERVER_ERROR, err);
+    }
+  }),
+  
   deleteUser: catchAsync(async (req, res, next) => {
     const userId = req.params.id;
     const { permanent } = req.query; // Assuming the query parameter "permanent" is used to determine the delete type
@@ -648,17 +674,17 @@ getConversationBetweenUsers: catchAsync(async (req, res, next) => {
     try {
       let user;
 
-      if (permanent === "true") {
-        // Delete permanently based on the condition
-        user = await Model.User.findByIdAndDelete(userId);
-      } else {
+      // if (permanent === "true") {
+      //   // Delete permanently based on the condition
+      //   user = await Model.User.findByIdAndDelete(userId);
+      // } else {
         // Mark as temporarily deleted (update a field, e.g., isDeleted)
         user = await Model.User.findByIdAndUpdate(
           userId,
           { isDeleted: true },
           { new: true, runValidators: true }
         );
-      }
+      // }
 
       if (!user) {
         return res.badRequest("User Not Found in our records");
@@ -675,6 +701,7 @@ getConversationBetweenUsers: catchAsync(async (req, res, next) => {
     }
   }),
 };
+
 // Function to generate a random temporary password
 function generateRandomPassword() {
   const requiredLength = 7; // We want the random part to be 7 characters long

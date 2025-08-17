@@ -88,12 +88,7 @@ router.route("/createRequest").post(
 //update NgoPost
 router.route("/updateNgo").put(
 //   Authentication.UserAuth,
-  // upload.fields([
-  //   {
-  //     name: "image",
-  //     maxCount: 1,
-  //   },
-  // ]),
+    uploadImage.fields([{ name: "image", maxCount: 1 }]),
   Controller.ngoController.updateNgo
 );
 

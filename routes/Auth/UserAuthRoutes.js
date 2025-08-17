@@ -65,6 +65,10 @@ router
 router
   .route("/deleteSingleUser/:id")
   .delete(Controller.UserAuthController.deleteUser);
+
+  router
+  .route("/editUser")
+  .post(Controller.UserAuthController.editUser);
   router
   .route("/conversation/:userId1/:userId2")
   .get(Controller.UserAuthController.getConversationBetweenUsers);

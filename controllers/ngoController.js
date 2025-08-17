@@ -137,8 +137,9 @@ createHelpRequest : catchAsync(async (req, res, next) => {
   updateNgo: catchAsync(async (req, res, next) => {
     try {
       // Get the Ngo data from the request body
+      console.log("update ngo")
       const { title, description,NgoId} = req.body;
-  
+        var NgoData = req.body;
       // Initialize update object
       const updateObject = {};
   
@@ -147,11 +148,12 @@ createHelpRequest : catchAsync(async (req, res, next) => {
       if (description) updateObject["description"] = description;
   
       // Upload primary image if provided
-      if (req.files && req.files.image) {
-        const imageFile = req.files.image[0];
-        const { path } = imageFile;
+       if (req.files && req.files.image) {
+        const primaryImages = req.files.image;
+        const primaryImage = primaryImages[0];
+        const { path } = primaryImage;
         const newPath = await cloudUpload.cloudinaryUpload(path);
-        updateObject["image"] = newPath;
+        NgoData.image = newPath;
       }
   
       // Update the Ngo
