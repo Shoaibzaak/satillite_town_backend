@@ -623,7 +623,7 @@ getConversationBetweenUsers: catchAsync(async (req, res, next) => {
   }),
   // Retrieve a single User with a particular ID
   getSingleUser: catchAsync(async (req, res, next) => {
-    const userId = req.user._id; // Assuming the user_id is stored in the _id field of the user object
+    const userId = req.params.id; // Assuming the user_id is stored in the _id field of the user object
     console.log(userId, "userId");
     try {
       const user = await Model.User.findById(userId)

@@ -46,8 +46,8 @@ router
   .route("/forgetPassword")
   .post(Controller.UserAuthController.forgetUserPassword);
 router
-  .route("/getSingleUser")
-  .get(Authentication.UserAuth,
+  .route("/getSingleUser/:id")
+  .get(
     Controller.UserAuthController.getSingleUser);
 
 router.route("/getAllCustomers").get(Controller.UserAuthController.getAllUsers1);
